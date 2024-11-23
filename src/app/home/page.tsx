@@ -34,14 +34,9 @@ const HomePage = () => {
         // Send Telegram user info to the backend
         const response = await axios.post('/api/onboard', telegramUser)
 
-        toast.success(`data ${response}`, {
-          description: response.data.username
-        } as any)
-
         setUser(response.data) // Store the user info in state
       } catch (error) {
         console.error('Error during user onboarding:', error)
-        toast.error(`Error during user onboarding: ${error}`)
       } finally {
         setIsLoading(false)
       }
@@ -52,23 +47,6 @@ const HomePage = () => {
 
 
   const [user, setUser] = useState<User | null>(null)
-
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const { data } = await axios.post('/api/onboard', {
-          telegramId: '1234567890', // Replace with actual Telegram ID
-        })
-        setUser(data)
-      } catch (error) {
-        console.error('Error fetching user data:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    fetchUser()
-  }, [])
 
   const loadingSkeleton = (
     <motion.div
