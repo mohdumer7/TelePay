@@ -38,6 +38,10 @@ const HomePage = () => {
         // Send Telegram user info to the backend
         const { data } = await axios.post('/api/onboard', telegramUser)
 
+        toast.success(`Welcome ${data}`, {
+          description: data.username
+        } as any)
+
         setUser(data) // Store the user info in state
       } catch (error) {
         console.error('Error during user onboarding:', error)
