@@ -31,14 +31,10 @@ const HomePage = () => {
         // Fetch user data from Telegram
         const telegramUser = getTelegramUser()
 
-        toast.success(`Welcome ${telegramUser.firstName}`, {
-          description: telegramUser.username
-        } as any)
-
         // Send Telegram user info to the backend
         const { data } = await axios.post('/api/onboard', telegramUser)
 
-        toast.success(`Welcome ${data}`, {
+        toast.success(`data ${data}`, {
           description: data.username
         } as any)
 
