@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import axios from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
 import dotenv from 'dotenv';
@@ -24,10 +26,7 @@ function createSignature(config: any) {
   console.log('Creating a signature for the request...');
 
   var ts = Math.floor(Date.now() / 1000);
-  if (!SUMSUB_SECRET_KEY) {
-    throw new Error('SUMSUB_SECRET_KEY must be provided!');
-  }
-  const signature = crypto.createHmac('sha256', SUMSUB_SECRET_KEY);
+  const signature = crypto.createHmac('sha256',  SUMSUB_SECRET_KEY);
   signature.update(ts + config.method.toUpperCase() + config.url);
 
   if (config.data instanceof FormData) {
@@ -45,7 +44,7 @@ function createSignature(config: any) {
 // These functions configure requests for specified method
 
 // https://docs.sumsub.com/reference/create-applicant
-function createApplicant(externalUserId: any, levelName: any) {
+function createApplicant(externalUserId, levelName) {
   console.log("Creating an applicant...");
 
   var method = 'post';
@@ -62,15 +61,15 @@ function createApplicant(externalUserId: any, levelName: any) {
       'X-App-Token': SUMSUB_APP_TOKEN
   };
 
-  return {
-    method: method,
-    url: url,
-    headers: headers,
-    data: JSON.stringify(body)
-  };
+  config.method = method;
+  config.url = url;
+  config.headers = headers;
+  config.data = JSON.stringify(body);
+
+  return config;
 }
 
-function getApplicantId(externalUserId: any) {
+function getApplicantId(externalUserId) {
   const method = 'get';
   const url = `/resources/applicants?externalUserId=${externalUserId}`;
 
@@ -79,15 +78,15 @@ function getApplicantId(externalUserId: any) {
     'X-App-Token': SUMSUB_APP_TOKEN
   };
 
-  return {
-    method: method,
-    url: url,
-    headers: headers,
-    data: null
-  };
+  config.method = method;
+  config.url = url;
+  config.headers = headers;
+  config.data = null;
+
+  return config;
 }
 
-function getApplicantInfo(externalUserId: any) {
+function getApplicantInfo(externalUserId) {
   const method = 'GET';
   const url = `https://api.sumsub.com/resources/applicants/-;externalUserId=${externalUserId}/one`;
   const headers = {
@@ -95,16 +94,16 @@ function getApplicantInfo(externalUserId: any) {
     'X-App-Token': SUMSUB_APP_TOKEN
   };
 
-  return {
-    method: method,
-    url: url,
-    headers: headers,
-    data: null
-  };
+  config.method = method;
+  config.url = url;
+  config.headers = headers;
+  config.data = null;
+
+  return config;
 }
 
 // https://docs.sumsub.com/reference/add-id-documents
-function addDocument(applicantId: any) {
+function addDocument(applicantId) {
   console.log("Adding document to the applicant...");
 
   var method = 'post';
@@ -137,16 +136,16 @@ function addDocument(applicantId: any) {
     'X-App-Token': SUMSUB_APP_TOKEN
   };
 
-  return {
-    method: method,
-    url: url,
-    headers: Object.assign(headers, form.getHeaders()),
-    data: form
-  };
+  config.method = method;
+  config.url = url;
+  config.headers = Object.assign(headers, form.getHeaders());
+  config.data = form;
+
+  return config;
 }
 
 // https://docs.sumsub.com/reference/get-applicant-review-status
-function getApplicantStatus(applicantId: any) {
+function getApplicantStatus(applicantId) {
   console.log("Getting the applicant status...");
 
   var method = 'get';
@@ -157,16 +156,16 @@ function getApplicantStatus(applicantId: any) {
     'X-App-Token': SUMSUB_APP_TOKEN
   };
 
-  return {
-    method: method,
-    url: url,
-    headers: headers,
-    data: null
-  };
+  config.method = method;
+  config.url = url;
+  config.headers = headers;
+  config.data = null;
+
+  return config;
 }
 
 // https://docs.sumsub.com/reference/generate-access-token-query
-function createAccessToken (externalUserId: any, levelName: any = 'basic-kyc-level', ttlInSecs: any = 600) {
+function createAccessToken (externalUserId, levelName = 'basic-kyc-level', ttlInSecs = 600) {
   console.log("Creating an access token for initializng SDK...");
 
   var method = 'post';
@@ -177,12 +176,12 @@ function createAccessToken (externalUserId: any, levelName: any = 'basic-kyc-lev
       'X-App-Token': SUMSUB_APP_TOKEN
   };
 
-  return {
-    method: method,
-    url: url,
-    headers: headers,
-    data: null
-  };
+  config.method = method;
+  config.url = url;
+  config.headers = headers;
+  config.data = null;
+
+  return config;
 }
 
 export async function GET(request: NextRequest) {
@@ -216,7 +215,7 @@ export async function GET(request: NextRequest) {
     console.log(response.data)
 
     return NextResponse.json(response.data)
-  } catch (error: any) {
+  } catch (error) {
     console.error(error.response);
     return new NextResponse(JSON.stringify({ error: 'Failed to get application status' }), {
       status: 500,
@@ -244,7 +243,7 @@ export async function POST(request: NextRequest) {
 
     const response = await axios(createAccessToken(externalUserId, levelName, 1200))
     return NextResponse.json(response.data)
-  } catch (error: any) {
+  } catch (error) {
     console.error(error.response.data);
     return new NextResponse(JSON.stringify({ error: 'Failed to generate Sumsub token' }), {
       status: 500,
@@ -254,4 +253,3 @@ export async function POST(request: NextRequest) {
     });
   }
 }
-

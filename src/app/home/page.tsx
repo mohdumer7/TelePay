@@ -10,7 +10,7 @@ import { Switch } from '@/components/ui/switch'
 import { IconBold, IconBolt, IconCreditCard, IconCurrencyDollar, IconDeviceMobile, IconDroplet, IconMoon, IconQrcode, IconSatellite, IconSun, IconTransfer, IconWallet } from '@tabler/icons-react'
 import { getTelegramUser } from '@/utils/telegram'
 import { Loader2 } from 'lucide-react'
-
+import { toast } from 'react-toastify'
 interface User {
   telegramId: string
   firstName: string
@@ -30,6 +30,10 @@ const HomePage = () => {
       try {
         // Fetch user data from Telegram
         const telegramUser = getTelegramUser()
+
+        toast.success('User data fetched successfully', {
+          description: telegramUser.username
+        } as any)
 
         // Send Telegram user info to the backend
         const { data } = await axios.post('/api/onboard', telegramUser)
