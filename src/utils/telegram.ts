@@ -1,6 +1,6 @@
 // utils/telegram.js
 export const getTelegramUser = () => {
-    const tg = window.Telegram.WebApp;
+    const tg = (window as any).Telegram.WebApp;
   
     // Ensure Telegram WebApp is initialized
     tg.ready();

@@ -30,7 +30,11 @@ userSchema.pre('save', async function (next) {
         const externalUserId = hash.digest('hex');
         return externalUserId;
     }
-    this.externalUserId = await generateExternalUserId(this.telegramId);
+    if (this.telegramId) {
+      this.externalUserId = await generateExternalUserId(this.telegramId);
+    }else{
+      this.externalUserId = await generateExternalUserId(this._id.toString());
+    }
     next();
 }); 
 

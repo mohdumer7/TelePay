@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
@@ -7,7 +7,16 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { toast } from 'react-toastify'
 import { IconArrowLeft } from '@tabler/icons-react'
-const PayToPeer = () => {
+
+function PeerPayPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PeerPayContent />
+    </Suspense>
+  )
+}
+
+function PeerPayContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const payUrl = searchParams.get("payUrl")
@@ -51,9 +60,9 @@ const PayToPeer = () => {
 
         <div className='flex flex-col gap-2 p-4'>
           <Label className='text-sm font-bold '>Payee VPA</Label>
-            <Input className='bg-transparent ' value={payeeVpa} disabled />
+            <Input className='bg-transparent ' value={payeeVpa || ""} disabled />
           <Label className='text-sm font-bold '>Payee Name</Label>
-            <Input className='bg-transparent' value={payeeName} disabled />
+            <Input className='bg-transparent' value={payeeName || ""} disabled />
           <Label className='text-sm font-bold '>Amount</Label>
             <Input className='bg-transparent' type='number' placeholder='Enter the amount' value={amount} onChange={(e)=>setAmount(e.target.value)} />
           <Button onClick={handlePay}>Pay</Button>
@@ -63,4 +72,4 @@ const PayToPeer = () => {
   )
 }
 
-export default PayToPeer
+export default PeerPayPage

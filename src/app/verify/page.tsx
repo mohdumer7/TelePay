@@ -48,8 +48,8 @@ const SumsubWidget = () => {
         }}
         className='w-full h-full rounded-xl'
         // options={{ addViewportTag: false, adaptIframeHeight: true }}
-        onMessage={(data, payload) => console.log("onMessage", data, payload)}
-        onError={(data) => console.log("onError", data)}
+        onMessage={(data: any, payload: any) => console.log("onMessage", data, payload)}
+        onError={(data: any) => console.log("onError", data)}
       />
     </div>
   );

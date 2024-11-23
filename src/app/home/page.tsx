@@ -10,6 +10,14 @@ import { Switch } from '@/components/ui/switch'
 import { IconBold, IconBolt, IconCreditCard, IconCurrencyDollar, IconDeviceMobile, IconDroplet, IconMoon, IconQrcode, IconSatellite, IconSun, IconTransfer, IconWallet } from '@tabler/icons-react'
 import { getTelegramUser } from '@/utils/telegram'
 
+interface User {
+  telegramId: string
+  firstName: string
+  lastName: string
+  walletBalance: number
+  rewardsBalance: number
+}
+
 const HomePage = () => {
   const router = useRouter()
   const [darkMode, setDarkMode] = useState(true)
@@ -37,7 +45,7 @@ const HomePage = () => {
   }, [])
 
 
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<User | null>(null)
 
 
   useEffect(() => {
@@ -74,7 +82,7 @@ const HomePage = () => {
     document.documentElement.classList.toggle('dark')
   }
 
-  const FeatureButton = ({ icon: Icon, label, color }) => (
+  const FeatureButton = ({ icon: Icon, label, color }: { icon: any, label: string, color: string }) => (
     <motion.div
       className="flex flex-col items-center"
       whileHover={{ scale: 1.05 }}
