@@ -35,12 +35,13 @@ const HomePage = () => {
         const response = await axios.post('/api/onboard', telegramUser)
 
         toast.success(`data ${response}`, {
-          description: response.username
+          description: response.data.username
         } as any)
 
-        setUser(data) // Store the user info in state
+        setUser(response.data) // Store the user info in state
       } catch (error) {
         console.error('Error during user onboarding:', error)
+        toast.error(`Error during user onboarding: ${error}`)
       } finally {
         setIsLoading(false)
       }
