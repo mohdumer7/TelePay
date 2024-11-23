@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "bot:dev": "ts-node bot/index.ts"
+    "bot:dev": "ts-node src/app/bot/index.ts"
   },
   "dependencies": {
     "@angelengineering/flashlight": "^1.1.1",

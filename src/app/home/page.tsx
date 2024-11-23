@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/c
 import { Switch } from '@/components/ui/switch'
 import { IconBold, IconBolt, IconCreditCard, IconCurrencyDollar, IconDeviceMobile, IconDroplet, IconMoon, IconQrcode, IconSatellite, IconSun, IconTransfer, IconWallet } from '@tabler/icons-react'
 import { getTelegramUser } from '@/utils/telegram'
+import { Loader2 } from 'lucide-react'
 
 interface User {
   telegramId: string
@@ -124,7 +125,9 @@ const HomePage = () => {
       <div className="max-w-md mx-auto space-y-6 p-6">
         <AnimatePresence>
           {isLoading ? (
-            loadingSkeleton
+            <div className="flex justify-center items-center h-full">
+              <Loader2 className="animate-spin text-white" />
+            </div>
           ) : (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
