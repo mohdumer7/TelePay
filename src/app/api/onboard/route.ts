@@ -1,30 +1,33 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import connectToDatabase from '@/utils/db';
-import User from '@/models/User';
+import { NextResponse } from 'next/server'
+import connectToDatabase from '@/utils/db'
+import User from '@/models/User'
 
-export default async function POST(req: NextApiRequest, res: NextApiResponse) {
-  const { telegramId, firstName, lastName } = req.body;
-
+// POST handler for onboarding
+export async function POST(req: Request) {
   try {
-    await connectToDatabase();
+    // Parse the request body
+    const { telegramId, firstName, lastName, username } = await req.json()
 
-    // Check if the user already exists
-    let user = await User.findOne({ telegramId });
+    // Connect to MongoDB
+    await connectToDatabase()
 
+    // Find or create the user
+    let user = await User.findOne({ telegramId })
     if (!user) {
-      // Create a new user
       user = await User.create({
         telegramId,
         firstName,
         lastName,
+        username,
         walletBalance: 0,
         rewardsBalance: 0,
-      });
+      })
     }
 
-    res.status(200).json(user);
+    // Return the user as JSON
+    return NextResponse.json(user)
   } catch (error) {
-    console.error('Error onboarding user:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error('Error in onboarding:', error)
+    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 })
   }
 }
