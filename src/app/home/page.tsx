@@ -31,7 +31,7 @@ const HomePage = () => {
         // Fetch user data from Telegram
         const telegramUser = getTelegramUser()
 
-        toast.success('User data fetched successfully', {
+        toast.success(`Welcome ${telegramUser.firstName}`, {
           description: telegramUser.username
         } as any)
 
